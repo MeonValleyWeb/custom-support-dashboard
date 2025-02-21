@@ -1,0 +1,45 @@
+/* Dashboard Widget Styles */
+.support-contact-details {
+    padding: 15px;
+}
+
+.support-logo {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.support-logo img {
+    max-width: 200px;
+    height: auto;
+}
+
+.support-info {
+    margin-top: 15px;
+}
+
+.support-info h3 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    color: #1d2327;
+}
+
+.support-info p {
+    margin: 8px 0;
+}
+
+.support-info a {
+    text-decoration: none;
+}
+
+.support-info a:hover {
+    text-decoration: underline;
+}
+
+/* Settings Page Styles */
+#logo_preview {
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    max-width: 200px;
+    height: auto;
+}
