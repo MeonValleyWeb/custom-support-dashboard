@@ -14,221 +14,225 @@
 
 namespace App\Plugins\SupportDashboard;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 class SupportDashboard {
-    private $support_details;
+	private $support_details;
 
-    public function __construct() {
-        // Define support details using constants
-        if (!defined('SUPPORT_COMPANY_NAME')) {
-            define('SUPPORT_COMPANY_NAME', 'Your Company Name');
-        }
-        if (!defined('SUPPORT_LOGO_URL')) {
-            define('SUPPORT_LOGO_URL', '/app/themes/your-theme/images/logo.png');
-        }
-        if (!defined('SUPPORT_EMAIL')) {
-            define('SUPPORT_EMAIL', 'support@example.com');
-        }
-        if (!defined('SUPPORT_PHONE')) {
-            define('SUPPORT_PHONE', '+1234567890');
-        }
-        if (!defined('SUPPORT_WEBSITE')) {
-            define('SUPPORT_WEBSITE', 'https://example.com');
-        }
+	public function __construct() {
+		// Define support details using constants
+		if ( ! defined( 'SUPPORT_COMPANY_NAME' ) ) {
+			define( 'SUPPORT_COMPANY_NAME', 'Your Company Name' );
+		}
+		if ( ! defined( 'SUPPORT_LOGO_URL' ) ) {
+			define( 'SUPPORT_LOGO_URL', '/app/themes/your-theme/images/logo.png' );
+		}
+		if ( ! defined( 'SUPPORT_EMAIL' ) ) {
+			define( 'SUPPORT_EMAIL', 'support@example.com' );
+		}
+		if ( ! defined( 'SUPPORT_PHONE' ) ) {
+			define( 'SUPPORT_PHONE', '+1234567890' );
+		}
+		if ( ! defined( 'SUPPORT_WEBSITE' ) ) {
+			define( 'SUPPORT_WEBSITE', 'https://example.com' );
+		}
 
-        // Load support details from constants
-        $this->support_details = [
-            'company_name' => SUPPORT_COMPANY_NAME,
-            'logo_url'     => SUPPORT_LOGO_URL,
-            'email'        => SUPPORT_EMAIL,
-            'phone'        => SUPPORT_PHONE,
-            'website'      => SUPPORT_WEBSITE
-        ];
+		// Load support details from constants
+		$this->support_details = array(
+			'company_name' => SUPPORT_COMPANY_NAME,
+			'logo_url'     => SUPPORT_LOGO_URL,
+			'email'        => SUPPORT_EMAIL,
+			'phone'        => SUPPORT_PHONE,
+			'website'      => SUPPORT_WEBSITE,
+		);
 
-        // Remove default dashboard widgets
-        add_action('wp_dashboard_setup', [$this, 'remove_default_dashboard_widgets'], 999);
-        
-        // Add our custom dashboard
-        add_action('wp_dashboard_setup', [$this, 'add_custom_dashboard']);
-        
-        // Add custom styles
-        add_action('admin_enqueue_scripts', [$this, 'add_dashboard_styles']);
-        
-        // Add admin menu for notices
-        add_action('admin_menu', [$this, 'add_admin_notices_menu']);
-        
-        // Register post type for admin notices
-        add_action('init', [$this, 'register_admin_notices_post_type']);
-    }
+		// Remove default dashboard widgets
+		add_action( 'wp_dashboard_setup', array( $this, 'remove_default_dashboard_widgets' ), 999 );
 
-    public function remove_default_dashboard_widgets() {
-        global $wp_meta_boxes;
-        
-        // Remove welcome panel
-        remove_action('welcome_panel', 'wp_welcome_panel');
-        
-        // Remove default widgets
-        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now']);
-        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_activity']);
-        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press']);
-        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']);
-    }
+		// Add our custom dashboard
+		add_action( 'wp_dashboard_setup', array( $this, 'add_custom_dashboard' ) );
 
-    public function add_custom_dashboard() {
-        wp_add_dashboard_widget(
-            'custom_support_dashboard',
-            'Support Information',
-            [$this, 'render_dashboard']
-        );
-        
-        wp_add_dashboard_widget(
-            'custom_admin_notices',
-            'Admin Notices',
-            [$this, 'render_admin_notices']
-        );
-    }
-    
-    public function register_admin_notices_post_type() {
-        $args = [
-            'public'             => false,
-            'publicly_queryable' => false,
-            'show_ui'            => true,
-            'show_in_menu'       => false,
-            'query_var'          => false,
-            'capability_type'    => 'post',
-            'has_archive'        => false,
-            'hierarchical'       => false,
-            'supports'           => ['title', 'editor'],
-            'labels'             => [
-                'name'               => 'Admin Notices',
-                'singular_name'      => 'Admin Notice',
-                'add_new'            => 'Add New Notice',
-                'add_new_item'       => 'Add New Admin Notice',
-                'edit_item'          => 'Edit Admin Notice',
-                'new_item'           => 'New Admin Notice',
-                'view_item'          => 'View Admin Notice',
-                'search_items'       => 'Search Admin Notices',
-                'not_found'          => 'No admin notices found',
-                'not_found_in_trash' => 'No admin notices found in Trash',
-            ],
-        ];
-        
-        register_post_type('admin_notice', $args);
-    }
-    
-    public function add_admin_notices_menu() {
-        add_menu_page(
-            'Admin Notices', 
-            'Admin Notices', 
-            'manage_options', 
-            'edit.php?post_type=admin_notice',
-            '',
-            'dashicons-megaphone',
-            30
-        );
-    }
+		// Add custom styles
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_dashboard_styles' ) );
 
-    public function render_dashboard() {
-        ?>
-        <div class="support-dashboard">
-            <div class="support-header">
-                <?php if ($this->support_details['logo_url']): ?>
-                    <div class="support-logo">
-                        <img src="<?php echo esc_url(home_url($this->support_details['logo_url'])); ?>" 
-                             alt="<?php echo esc_attr($this->support_details['company_name']); ?> Logo">
-                    </div>
-                <?php endif; ?>
+		// Add admin menu for notices
+		add_action( 'admin_menu', array( $this, 'add_admin_notices_menu' ) );
 
-                <div class="support-contact">
-                    <?php if ($this->support_details['company_name']): ?>
-                        <h2><?php echo esc_html($this->support_details['company_name']); ?></h2>
-                    <?php endif; ?>
+		// Register post type for admin notices
+		add_action( 'init', array( $this, 'register_admin_notices_post_type' ) );
+	}
 
-                    <div class="support-details">
-                        <?php if ($this->support_details['website']): ?>
-                            <div class="support-item">
-                                <span class="dashicons dashicons-admin-site"></span>
-                                <a href="<?php echo esc_url($this->support_details['website']); ?>" 
-                                   target="_blank" rel="noopener">
-                                    <?php echo esc_html($this->support_details['website']); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
+	public function remove_default_dashboard_widgets() {
+		global $wp_meta_boxes;
 
-                        <?php if ($this->support_details['email']): ?>
-                            <div class="support-item">
-                                <span class="dashicons dashicons-email"></span>
-                                <a href="mailto:<?php echo esc_attr($this->support_details['email']); ?>">
-                                    <?php echo esc_html($this->support_details['email']); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
+		// Remove welcome panel
+		remove_action( 'welcome_panel', 'wp_welcome_panel' );
 
-                        <?php if ($this->support_details['phone']): ?>
-                            <div class="support-item">
-                                <span class="dashicons dashicons-phone"></span>
-                                <a href="tel:<?php echo esc_attr($this->support_details['phone']); ?>">
-                                    <?php echo esc_html($this->support_details['phone']); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php
-    }
-    
-    public function render_admin_notices() {
-        $notices = get_posts([
-            'post_type'      => 'admin_notice',
-            'posts_per_page' => 5,
-            'orderby'        => 'date',
-            'order'          => 'DESC',
-        ]);
-        
-        if (empty($notices)) {
-            echo '<p>No admin notices available.</p>';
-            
-            if (current_user_can('manage_options')) {
-                echo '<p><a href="' . admin_url('post-new.php?post_type=admin_notice') . '" class="button">Add New Notice</a></p>';
-            }
-            
-            return;
-        }
-        ?>
-        <div class="admin-notices">
-            <?php foreach ($notices as $notice): ?>
-                <div class="admin-notice">
-                    <h3><?php echo esc_html($notice->post_title); ?></h3>
-                    <div class="notice-content">
-                        <?php echo wp_kses_post(wpautop($notice->post_content)); ?>
-                    </div>
-                    <div class="notice-meta">
-                        <span class="notice-date"><?php echo get_the_date('F j, Y', $notice); ?></span>
-                        <?php if (current_user_can('edit_post', $notice->ID)): ?>
-                            <a href="<?php echo get_edit_post_link($notice->ID); ?>" class="edit-notice">Edit</a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-            
-            <?php if (current_user_can('manage_options')): ?>
-                <p><a href="<?php echo admin_url('edit.php?post_type=admin_notice'); ?>" class="button">View All Notices</a>
-                <a href="<?php echo admin_url('post-new.php?post_type=admin_notice'); ?>" class="button">Add New Notice</a></p>
-            <?php endif; ?>
-        </div>
-        <?php
-    }
+		// Remove default widgets
+		unset( $wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now'] );
+		unset( $wp_meta_boxes['dashboard']['normal']['core']['dashboard_activity'] );
+		unset( $wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press'] );
+		unset( $wp_meta_boxes['dashboard']['side']['core']['dashboard_primary'] );
+	}
 
-    public function add_dashboard_styles() {
-        $screen = get_current_screen();
-        if ($screen->id !== 'dashboard') {
-            return;
-        }
+	public function add_custom_dashboard() {
+		wp_add_dashboard_widget(
+			'custom_support_dashboard',
+			'Support Information',
+			array( $this, 'render_dashboard' )
+		);
 
-        wp_add_inline_style('dashicons', '
+		wp_add_dashboard_widget(
+			'custom_admin_notices',
+			'Admin Notices',
+			array( $this, 'render_admin_notices' )
+		);
+	}
+
+	public function register_admin_notices_post_type() {
+		$args = array(
+			'public'             => false,
+			'publicly_queryable' => false,
+			'show_ui'            => true,
+			'show_in_menu'       => false,
+			'query_var'          => false,
+			'capability_type'    => 'post',
+			'has_archive'        => false,
+			'hierarchical'       => false,
+			'supports'           => array( 'title', 'editor' ),
+			'labels'             => array(
+				'name'               => 'Admin Notices',
+				'singular_name'      => 'Admin Notice',
+				'add_new'            => 'Add New Notice',
+				'add_new_item'       => 'Add New Admin Notice',
+				'edit_item'          => 'Edit Admin Notice',
+				'new_item'           => 'New Admin Notice',
+				'view_item'          => 'View Admin Notice',
+				'search_items'       => 'Search Admin Notices',
+				'not_found'          => 'No admin notices found',
+				'not_found_in_trash' => 'No admin notices found in Trash',
+			),
+		);
+
+		register_post_type( 'admin_notice', $args );
+	}
+
+	public function add_admin_notices_menu() {
+		add_menu_page(
+			'Admin Notices',
+			'Admin Notices',
+			'manage_options',
+			'edit.php?post_type=admin_notice',
+			'',
+			'dashicons-megaphone',
+			30
+		);
+	}
+
+	public function render_dashboard() {
+		?>
+		<div class="support-dashboard">
+			<div class="support-header">
+				<?php if ( $this->support_details['logo_url'] ) : ?>
+					<div class="support-logo">
+						<img src="<?php echo esc_url( home_url( $this->support_details['logo_url'] ) ); ?>" 
+							alt="<?php echo esc_attr( $this->support_details['company_name'] ); ?> Logo">
+					</div>
+				<?php endif; ?>
+
+				<div class="support-contact">
+					<?php if ( $this->support_details['company_name'] ) : ?>
+						<h2><?php echo esc_html( $this->support_details['company_name'] ); ?></h2>
+					<?php endif; ?>
+
+					<div class="support-details">
+						<?php if ( $this->support_details['website'] ) : ?>
+							<div class="support-item">
+								<span class="dashicons dashicons-admin-site"></span>
+								<a href="<?php echo esc_url( $this->support_details['website'] ); ?>" 
+									target="_blank" rel="noopener">
+									<?php echo esc_html( $this->support_details['website'] ); ?>
+								</a>
+							</div>
+						<?php endif; ?>
+
+						<?php if ( $this->support_details['email'] ) : ?>
+							<div class="support-item">
+								<span class="dashicons dashicons-email"></span>
+								<a href="mailto:<?php echo esc_attr( $this->support_details['email'] ); ?>">
+									<?php echo esc_html( $this->support_details['email'] ); ?>
+								</a>
+							</div>
+						<?php endif; ?>
+
+						<?php if ( $this->support_details['phone'] ) : ?>
+							<div class="support-item">
+								<span class="dashicons dashicons-phone"></span>
+								<a href="tel:<?php echo esc_attr( $this->support_details['phone'] ); ?>">
+									<?php echo esc_html( $this->support_details['phone'] ); ?>
+								</a>
+							</div>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	public function render_admin_notices() {
+		$notices = get_posts(
+			array(
+				'post_type'      => 'admin_notice',
+				'posts_per_page' => 5,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+
+		if ( empty( $notices ) ) {
+			echo '<p>No admin notices available.</p>';
+
+			if ( current_user_can( 'manage_options' ) ) {
+				echo '<p><a href="' . admin_url( 'post-new.php?post_type=admin_notice' ) . '" class="button">Add New Notice</a></p>';
+			}
+
+			return;
+		}
+		?>
+		<div class="admin-notices">
+			<?php foreach ( $notices as $notice ) : ?>
+				<div class="admin-notice">
+					<h3><?php echo esc_html( $notice->post_title ); ?></h3>
+					<div class="notice-content">
+						<?php echo wp_kses_post( wpautop( $notice->post_content ) ); ?>
+					</div>
+					<div class="notice-meta">
+						<span class="notice-date"><?php echo get_the_date( 'F j, Y', $notice ); ?></span>
+						<?php if ( current_user_can( 'edit_post', $notice->ID ) ) : ?>
+							<a href="<?php echo get_edit_post_link( $notice->ID ); ?>" class="edit-notice">Edit</a>
+						<?php endif; ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+			
+			<?php if ( current_user_can( 'manage_options' ) ) : ?>
+				<p><a href="<?php echo admin_url( 'edit.php?post_type=admin_notice' ); ?>" class="button">View All Notices</a>
+				<a href="<?php echo admin_url( 'post-new.php?post_type=admin_notice' ); ?>" class="button">Add New Notice</a></p>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	public function add_dashboard_styles() {
+		$screen = get_current_screen();
+		if ( $screen->id !== 'dashboard' ) {
+			return;
+		}
+
+		wp_add_inline_style(
+			'dashicons',
+			'
             /* Support Dashboard Styles */
             .support-dashboard {
                 padding: 10px;
@@ -360,11 +364,15 @@ class SupportDashboard {
                     margin: 0 0 20px 0;
                 }
             }
-        ');
-    }
+        '
+		);
+	}
 }
 
 // Initialize the plugin
-add_action('plugins_loaded', function() {
-    new SupportDashboard();
-});
+add_action(
+	'plugins_loaded',
+	function () {
+		new SupportDashboard();
+	}
+);
