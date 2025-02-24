@@ -3,7 +3,13 @@
  * Plugin Name: Custom Support Dashboard
  * Description: Displays support contact information and admin notices on WordPress dashboard
  * Version: 1.0.0
- * Author: Your Name
+ * Plugin URI: https://meonvalleyweb.com/plugins/
+ * Author: Andrew Wilkinson
+ * Author URI: https://meonvalleyweb.com
+ * License: GPL2
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: custom-support-dashboard
+ * Requires PHP: 7.0
  */
 
 namespace App\Plugins\SupportDashboard;
