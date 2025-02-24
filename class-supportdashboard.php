@@ -11,10 +11,10 @@
  * Text Domain: custom-support-dashboard
  * Requires PHP: 7.0
  *
- * @package MeonValleyWeb\CustomSupportDashboard
+ * @package CustomSupportDashboard
  */
 
-namespace MeonValleyWeb\CustomSupportDashboard;
+namespace CustomSupportDashboard;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -41,43 +41,43 @@ class SupportDashboard {
 	 */
 	public function __construct() {
 		// Define support details using constants.
-		if ( ! defined( 'MEONVALLEYWEB_CSD_COMPANY_NAME' ) ) {
-			define( 'MEONVALLEYWEB_CSD_COMPANY_NAME', 'Your Company Name' );
+		if ( ! defined( 'CUSTOM_SUPPORT_DASHBOARD_COMPANY_NAME' ) ) {
+			define( 'CUSTOM_SUPPORT_DASHBOARD_COMPANY_NAME', 'Your Company Name' );
 		}
-		if ( ! defined( 'MEONVALLEYWEB_CSD_LOGO_URL' ) ) {
-			define( 'MEONVALLEYWEB_CSD_LOGO_URL', '/app/themes/your-theme/images/logo.png' );
+		if ( ! defined( 'CUSTOM_SUPPORT_DASHBOARD_LOGO_URL' ) ) {
+			define( 'CUSTOM_SUPPORT_DASHBOARD_LOGO_URL', '/app/themes/your-theme/images/logo.png' );
 		}
-		if ( ! defined( 'MEONVALLEYWEB_CSD_EMAIL' ) ) {
-			define( 'MEONVALLEYWEB_CSD_EMAIL', 'support@example.com' );
+		if ( ! defined( 'CUSTOM_SUPPORT_DASHBOARD_EMAIL' ) ) {
+			define( 'CUSTOM_SUPPORT_DASHBOARD_EMAIL', 'support@example.com' );
 		}
-		if ( ! defined( 'MEONVALLEYWEB_CSD_PHONE' ) ) {
-			define( 'MEONVALLEYWEB_CSD_PHONE', '+1234567890' );
+		if ( ! defined( 'CUSTOM_SUPPORT_DASHBOARD_PHONE' ) ) {
+			define( 'CUSTOM_SUPPORT_DASHBOARD_PHONE', '+1234567890' );
 		}
-		if ( ! defined( 'MEONVALLEYWEB_CSD_WEBSITE' ) ) {
-			define( 'MEONVALLEYWEB_CSD_WEBSITE', 'https://example.com' );
+		if ( ! defined( 'CUSTOM_SUPPORT_DASHBOARD_WEBSITE' ) ) {
+			define( 'CUSTOM_SUPPORT_DASHBOARD_WEBSITE', 'https://example.com' );
 		}
 
 		// Load support details from constants.
 		$this->support_details = array(
-			'company_name' => MEONVALLEYWEB_CSD_COMPANY_NAME,
-			'logo_url'     => MEONVALLEYWEB_CSD_LOGO_URL,
-			'email'        => MEONVALLEYWEB_CSD_EMAIL,
-			'phone'        => MEONVALLEYWEB_CSD_PHONE,
-			'website'      => MEONVALLEYWEB_CSD_WEBSITE,
+			'company_name' => CUSTOM_SUPPORT_DASHBOARD_COMPANY_NAME,
+			'logo_url'     => CUSTOM_SUPPORT_DASHBOARD_LOGO_URL,
+			'email'        => CUSTOM_SUPPORT_DASHBOARD_EMAIL,
+			'phone'        => CUSTOM_SUPPORT_DASHBOARD_PHONE,
+			'website'      => CUSTOM_SUPPORT_DASHBOARD_WEBSITE,
 		);
 
 		// Remove default dashboard widgets.
 		add_action( 'wp_dashboard_setup', array( $this, 'remove_default_dashboard_widgets' ), 999 );
-		
+
 		// Add our custom dashboard.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_custom_dashboard' ) );
-		
+
 		// Add custom styles.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_dashboard_styles' ) );
-		
+
 		// Add admin menu for notices.
 		add_action( 'admin_menu', array( $this, 'add_admin_notices_menu' ) );
-		
+
 		// Register post type for admin notices.
 		add_action( 'init', array( $this, 'register_admin_notices_post_type' ) );
 	}
@@ -93,7 +93,7 @@ class SupportDashboard {
 
 		// Remove welcome panel.
 		remove_action( 'welcome_panel', 'wp_welcome_panel' );
-		
+
 		// Remove default widgets.
 		unset( $wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now'] );
 		unset( $wp_meta_boxes['dashboard']['normal']['core']['dashboard_activity'] );
