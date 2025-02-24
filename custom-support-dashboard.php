@@ -258,12 +258,14 @@ class SupportDashboard {
             .support-details {
                 display: flex;
                 flex-direction: column;
-                gap: 10px;
+                gap: 15px;
+                padding-top: 10px;
             }
             
             .support-item {
                 display: flex;
                 align-items: center;
+                padding: 5px 0;
             }
             
             .support-item .dashicons {
