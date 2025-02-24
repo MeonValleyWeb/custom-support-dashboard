@@ -12,38 +12,45 @@
  * Requires PHP: 7.0
  */
 
-namespace App\Plugins\SupportDashboard;
+namespace MeonValley\CustomSupportDashboard;
 
 defined( 'ABSPATH' ) || exit;
+
+/**
+ * Main class for the Custom Support Dashboard plugin.
+ *
+ * @package MeonValley\CustomSupportDashboard
+ * @since 1.0.0
+ */
 
 class SupportDashboard {
 	private $support_details;
 
 	public function __construct() {
 		// Define support details using constants
-		if ( ! defined( 'SUPPORT_COMPANY_NAME' ) ) {
-			define( 'SUPPORT_COMPANY_NAME', 'Your Company Name' );
+		if ( ! defined( 'MVWEB_SD_COMPANY_NAME' ) ) {
+			define( 'MVWEB_SD_COMPANY_NAME', 'Your Company Name' );
 		}
-		if ( ! defined( 'SUPPORT_LOGO_URL' ) ) {
-			define( 'SUPPORT_LOGO_URL', '/app/themes/your-theme/images/logo.png' );
+		if ( ! defined( 'MVWEB_SD_LOGO_URL' ) ) {
+			define( 'MVWEB_SD_LOGO_URL', '/app/themes/your-theme/images/logo.png' );
 		}
-		if ( ! defined( 'SUPPORT_EMAIL' ) ) {
-			define( 'SUPPORT_EMAIL', 'support@example.com' );
+		if ( ! defined( 'MVWEB_SD_EMAIL' ) ) {
+			define( 'MVWEB_SD_EMAIL', 'support@example.com' );
 		}
-		if ( ! defined( 'SUPPORT_PHONE' ) ) {
-			define( 'SUPPORT_PHONE', '+1234567890' );
+		if ( ! defined( 'MVWEB_SD_PHONE' ) ) {
+			define( 'MVWEB_SD_PHONE', '+1234567890' );
 		}
-		if ( ! defined( 'SUPPORT_WEBSITE' ) ) {
-			define( 'SUPPORT_WEBSITE', 'https://example.com' );
+		if ( ! defined( 'MVWEB_SD_WEBSITE' ) ) {
+			define( 'MVWEB_SD_WEBSITE', 'https://example.com' );
 		}
 
 		// Load support details from constants
 		$this->support_details = array(
-			'company_name' => SUPPORT_COMPANY_NAME,
-			'logo_url'     => SUPPORT_LOGO_URL,
-			'email'        => SUPPORT_EMAIL,
-			'phone'        => SUPPORT_PHONE,
-			'website'      => SUPPORT_WEBSITE,
+			'company_name' => MVWEB_SD_COMPANY_NAME,
+			'logo_url'     => MVWEB_SD_LOGO_URL,
+			'email'        => MVWEB_SD_EMAIL,
+			'phone'        => MVWEB_SD_PHONE,
+			'website'      => MVWEB_SD_WEBSITE,
 		);
 
 		// Remove default dashboard widgets
