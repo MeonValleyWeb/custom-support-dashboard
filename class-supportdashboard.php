@@ -10,78 +10,103 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: custom-support-dashboard
  * Requires PHP: 7.0
+ *
+ * @package MeonValleyWeb\CustomSupportDashboard
  */
 
-namespace MeonValley\CustomSupportDashboard;
+namespace MeonValleyWeb\CustomSupportDashboard;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Main class for the Custom Support Dashboard plugin.
  *
- * @package MeonValley\CustomSupportDashboard
+ * @package MeonValleyWeb\CustomSupportDashboard
  * @since 1.0.0
  */
-
 class SupportDashboard {
+	/**
+	 * Support information details.
+	 *
+	 * @var array
+	 */
 	private $support_details;
 
+	/**
+	 * Initialize the Support Dashboard.
+	 *
+	 * Defines constants, sets up support details and registers hooks.
+	 *
+	 * @since 1.0.0
+	 */
 	public function __construct() {
-		// Define support details using constants
-		if ( ! defined( 'MVWEB_SD_COMPANY_NAME' ) ) {
-			define( 'MVWEB_SD_COMPANY_NAME', 'Your Company Name' );
+		// Define support details using constants.
+		if ( ! defined( 'MEONVALLEYWEB_CSD_COMPANY_NAME' ) ) {
+			define( 'MEONVALLEYWEB_CSD_COMPANY_NAME', 'Your Company Name' );
 		}
-		if ( ! defined( 'MVWEB_SD_LOGO_URL' ) ) {
-			define( 'MVWEB_SD_LOGO_URL', '/app/themes/your-theme/images/logo.png' );
+		if ( ! defined( 'MEONVALLEYWEB_CSD_LOGO_URL' ) ) {
+			define( 'MEONVALLEYWEB_CSD_LOGO_URL', '/app/themes/your-theme/images/logo.png' );
 		}
-		if ( ! defined( 'MVWEB_SD_EMAIL' ) ) {
-			define( 'MVWEB_SD_EMAIL', 'support@example.com' );
+		if ( ! defined( 'MEONVALLEYWEB_CSD_EMAIL' ) ) {
+			define( 'MEONVALLEYWEB_CSD_EMAIL', 'support@example.com' );
 		}
-		if ( ! defined( 'MVWEB_SD_PHONE' ) ) {
-			define( 'MVWEB_SD_PHONE', '+1234567890' );
+		if ( ! defined( 'MEONVALLEYWEB_CSD_PHONE' ) ) {
+			define( 'MEONVALLEYWEB_CSD_PHONE', '+1234567890' );
 		}
-		if ( ! defined( 'MVWEB_SD_WEBSITE' ) ) {
-			define( 'MVWEB_SD_WEBSITE', 'https://example.com' );
+		if ( ! defined( 'MEONVALLEYWEB_CSD_WEBSITE' ) ) {
+			define( 'MEONVALLEYWEB_CSD_WEBSITE', 'https://example.com' );
 		}
 
-		// Load support details from constants
+		// Load support details from constants.
 		$this->support_details = array(
-			'company_name' => MVWEB_SD_COMPANY_NAME,
-			'logo_url'     => MVWEB_SD_LOGO_URL,
-			'email'        => MVWEB_SD_EMAIL,
-			'phone'        => MVWEB_SD_PHONE,
-			'website'      => MVWEB_SD_WEBSITE,
+			'company_name' => MEONVALLEYWEB_CSD_COMPANY_NAME,
+			'logo_url'     => MEONVALLEYWEB_CSD_LOGO_URL,
+			'email'        => MEONVALLEYWEB_CSD_EMAIL,
+			'phone'        => MEONVALLEYWEB_CSD_PHONE,
+			'website'      => MEONVALLEYWEB_CSD_WEBSITE,
 		);
 
-		// Remove default dashboard widgets
+		// Remove default dashboard widgets.
 		add_action( 'wp_dashboard_setup', array( $this, 'remove_default_dashboard_widgets' ), 999 );
-
-		// Add our custom dashboard
+		
+		// Add our custom dashboard.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_custom_dashboard' ) );
-
-		// Add custom styles
+		
+		// Add custom styles.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_dashboard_styles' ) );
-
-		// Add admin menu for notices
+		
+		// Add admin menu for notices.
 		add_action( 'admin_menu', array( $this, 'add_admin_notices_menu' ) );
-
-		// Register post type for admin notices
+		
+		// Register post type for admin notices.
 		add_action( 'init', array( $this, 'register_admin_notices_post_type' ) );
 	}
 
+	/**
+	 * Remove default WordPress dashboard widgets.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function remove_default_dashboard_widgets() {
 		global $wp_meta_boxes;
 
-		// Remove welcome panel
+		// Remove welcome panel.
 		remove_action( 'welcome_panel', 'wp_welcome_panel' );
-
-		// Remove default widgets
+		
+		// Remove default widgets.
 		unset( $wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now'] );
 		unset( $wp_meta_boxes['dashboard']['normal']['core']['dashboard_activity'] );
 		unset( $wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press'] );
 		unset( $wp_meta_boxes['dashboard']['side']['core']['dashboard_primary'] );
 	}
 
+	/**
+	 * Add custom dashboard widgets.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function add_custom_dashboard() {
 		wp_add_dashboard_widget(
 			'custom_support_dashboard',
@@ -96,6 +121,12 @@ class SupportDashboard {
 		);
 	}
 
+	/**
+	 * Register custom post type for admin notices.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function register_admin_notices_post_type() {
 		$args = array(
 			'public'             => false,
@@ -124,6 +155,12 @@ class SupportDashboard {
 		register_post_type( 'admin_notice', $args );
 	}
 
+	/**
+	 * Add admin menu for admin notices.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function add_admin_notices_menu() {
 		add_menu_page(
 			'Admin Notices',
@@ -136,6 +173,12 @@ class SupportDashboard {
 		);
 	}
 
+	/**
+	 * Render support dashboard widget content.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function render_dashboard() {
 		?>
 		<div class="support-dashboard">
@@ -187,6 +230,12 @@ class SupportDashboard {
 		<?php
 	}
 
+	/**
+	 * Render admin notices widget content.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function render_admin_notices() {
 		$notices = get_posts(
 			array(
@@ -201,7 +250,7 @@ class SupportDashboard {
 			echo '<p>No admin notices available.</p>';
 
 			if ( current_user_can( 'manage_options' ) ) {
-				echo '<p><a href="' . admin_url( 'post-new.php?post_type=admin_notice' ) . '" class="button">Add New Notice</a></p>';
+				echo '<p><a href="' . esc_url( admin_url( 'post-new.php?post_type=admin_notice' ) ) . '" class="button">Add New Notice</a></p>';
 			}
 
 			return;
@@ -217,23 +266,29 @@ class SupportDashboard {
 					<div class="notice-meta">
 						<span class="notice-date"><?php echo get_the_date( 'F j, Y', $notice ); ?></span>
 						<?php if ( current_user_can( 'edit_post', $notice->ID ) ) : ?>
-							<a href="<?php echo get_edit_post_link( $notice->ID ); ?>" class="edit-notice">Edit</a>
+							<a href="<?php echo esc_url( get_edit_post_link( $notice->ID ) ); ?>" class="edit-notice">Edit</a>
 						<?php endif; ?>
 					</div>
 				</div>
 			<?php endforeach; ?>
 			
 			<?php if ( current_user_can( 'manage_options' ) ) : ?>
-				<p><a href="<?php echo admin_url( 'edit.php?post_type=admin_notice' ); ?>" class="button">View All Notices</a>
-				<a href="<?php echo admin_url( 'post-new.php?post_type=admin_notice' ); ?>" class="button">Add New Notice</a></p>
+				<p><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=admin_notice' ) ); ?>" class="button">View All Notices</a>
+				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=admin_notice' ) ); ?>" class="button">Add New Notice</a></p>
 			<?php endif; ?>
 		</div>
 		<?php
 	}
 
+	/**
+	 * Add custom dashboard styles.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
 	public function add_dashboard_styles() {
 		$screen = get_current_screen();
-		if ( $screen->id !== 'dashboard' ) {
+		if ( 'dashboard' !== $screen->id ) {
 			return;
 		}
 
@@ -376,7 +431,7 @@ class SupportDashboard {
 	}
 }
 
-// Initialize the plugin
+// Initialize the plugin.
 add_action(
 	'plugins_loaded',
 	function () {
