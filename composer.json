@@ -4,21 +4,18 @@
   "description": "Dashboard for client support",
   "require": {
     "php": ">=8.1"
-  }
-}
-
-{
-    "require-dev": {
-        "wp-coding-standards/wpcs": "^3.1",
-        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
-    },
-    "scripts": {
+  },
+  "require-dev": {
+    "wp-coding-standards/wpcs": "^3.1",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "scripts": {
     "phpcs": "phpcs",
     "phpcbf": "phpcbf"
-}
+  }
 }
