@@ -1,4 +1,13 @@
 {
+  "name": "meonvalleyweb/custom-support-dashboard",
+  "type": "wordpress-plugin",
+  "description": "Dashboard for client support",
+  "require": {
+    "php": ">=8.1"
+  }
+}
+
+{
     "require-dev": {
         "wp-coding-standards/wpcs": "^3.1",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
