@@ -58,9 +58,14 @@ class SupportDashboard {
 		}
 
 		// Load support details from constants.
+        $logo_url = CUSTOM_SUPPORT_DASHBOARD_LOGO_URL;
+        // Check if URL is absolute (starts with http:// or https://)
+        $is_absolute = preg_match('/^https?:\/\//i', $logo_url) === 1;
+
 		$this->support_details = array(
 			'company_name' => CUSTOM_SUPPORT_DASHBOARD_COMPANY_NAME,
-			'logo_url'     => CUSTOM_SUPPORT_DASHBOARD_LOGO_URL,
+            'logo_url'     => $logo_url,
+            'logo_is_absolute' => $is_absolute,
 			'email'        => CUSTOM_SUPPORT_DASHBOARD_EMAIL,
 			'phone'        => CUSTOM_SUPPORT_DASHBOARD_PHONE,
 			'website'      => CUSTOM_SUPPORT_DASHBOARD_WEBSITE,
@@ -183,12 +188,14 @@ class SupportDashboard {
 		?>
 		<div class="support-dashboard">
 			<div class="support-header">
-				<?php if ( $this->support_details['logo_url'] ) : ?>
-					<div class="support-logo">
-						<img src="<?php echo esc_url( home_url( $this->support_details['logo_url'] ) ); ?>" 
-							alt="<?php echo esc_attr( $this->support_details['company_name'] ); ?> Logo">
-					</div>
-				<?php endif; ?>
+                <?php if ( $this->support_details['logo_url'] ) : ?>
+                    <div class="support-logo">
+                        <img src="<?php echo $this->support_details['logo_is_absolute'] ?
+                            esc_url( $this->support_details['logo_url'] ) :
+                            esc_url( home_url( $this->support_details['logo_url'] ) ); ?>"
+                             alt="<?php echo esc_attr( $this->support_details['company_name'] ); ?> Logo">
+                    </div>
+                <?php endif; ?>
 
 				<div class="support-contact">
 					<?php if ( $this->support_details['company_name'] ) : ?>
